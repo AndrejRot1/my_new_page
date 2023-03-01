@@ -1,0 +1,76 @@
+
+
+<!DOCTYPE html>
+<body>
+
+  <p> test </p>
+
+  <!-- Insert this script at the bottom of the HTML, but before you use any Firebase services -->
+       <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+       <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+       <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyBQoIt8afSaX45cpajoqpnTYTPD3IdhjWQ",
+    authDomain: "netget-1ca9b.firebaseapp.com",
+    databaseURL: "https://netget-1ca9b-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "netget-1ca9b",
+    storageBucket: "netget-1ca9b.appspot.com",
+    messagingSenderId: "387670549835",
+    appId: "1:387670549835:web:3302da3f236e9a207c34ce"
+  };
+
+  // Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+var database = firebase.database();
+
+function read(){
+    const dbRef = database.ref();
+    dbRef.child("IPs").get().then((snapshot) => {
+  if (snapshot.exists()) {
+    console.log(snapshot.val());
+  } else {
+    console.log("No data available");
+  }
+}).catch((error) => {
+  console.error(error);
+});
+alert("data readed")
+
+}
+
+read()
+
+
+var postId = 7;
+
+fetch("https://api.ipify.org/?format=json")
+  .then(response => response.json())
+  .then(data => {
+    database.ref('IPs/'+ postId).set(
+      {log:1,
+      ip:data.ip}
+    )
+
+    alert('data saved')
+  })
+
+  .catch(error => {
+    console.error("Error getting IP address:", error);
+  });
+
+  database.ref('IPs').on('value',(snap)=>{
+      console.log(snap.val());
+    });
+
+
+</script>
+
+</body>
